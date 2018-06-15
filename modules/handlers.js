@@ -1,6 +1,7 @@
 var fs = require('fs');
 
 var formidable = require('formidable');
+var http = require('http');
 
 exports.upload = function(request, response) {
     console.log("Rozpoczynam obsługę żądania upload.");
