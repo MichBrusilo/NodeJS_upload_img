@@ -1,12 +1,23 @@
 var fs = require('fs');
 
 var formidable = require('formidable');
+var mv = require('mv');
 var http = require('http');
+var urlFile;
 
 exports.upload = function(request, response) {
     console.log("Rozpoczynam obsługę żądania upload.");
     var form = new formidable.IncomingForm();
+    form.uploadDir = "./uploaded"; 
+    form.keepExtensions = true;
     form.parse(request, function(error, fields, files) {
+        urlFile = "uploaded/" + files.upload.name;
+        urlFile = urlFile.toString();
+        mv(files.upload.path, urlFile, function(err)
+        {if(err) throw error;
+        console.log('Files moved succesfully');
+        });
+
         fs.renameSync(files.upload.path, "test.png");
         response.writeHead(200, {"Content-Type": "text/html"});
         response.write("received image:<br/>");
